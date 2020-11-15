@@ -20,14 +20,20 @@ async def on_message(message):
         
         
         elif message.content.startswith('/say'):
-            m = message.content[5:]
-            await message.delete()
+            m = message.content[5:]    # 5文字目以降を取得
+            await message.delete()    #1つ前のメッセージを消す
             await message.channel.send(m)
         
         
         elif message.content.startswith('/help'):   # 改行コード使用例↓ と、代入するのはmじゃなくてもいい証明
-            a = 'わたしが反応する言葉は、\n・おはよう\n・おやすみ\n・かわいい\n・生きてる\n・おみくじ\n・今日の格言\nだよ！(今のところ)'
-            await message.channel.send(a)
+            desc1 = '\n・おはよう\n・おやすみ\n(・かわいい)\n・生きてる\n・おみくじ\n(・今日の格言)\n・鈴花'
+            embed = discord.Embed(title="反応する言葉",description=desc1, color=0x64ec86)
+            embed.add_field(name="/say",value="何かを言わせられるよ",inline=False)
+            embed.add_field(name="/termux",value="termuxの使い方を教えるよ",inline=False)
+            embed.add_field(name="/howtocheck",value="termuxでのpythonのチェックのしかたを教えるよ",inline=False)
+            embed.add_field(name="/logout",value="ログアウトするよ(使わないで！)",inline=False)
+            embed.add_field(name="/slot",value="スロットをプレイするよ",inline=False)
+            await message.channel.send(embed=embed)
         
         
         elif message.content.startswith('/termux'):
@@ -44,8 +50,8 @@ async def on_message(message):
             m = 'じゃあね'
             await message.delete()
             await message.channel.send(m)
-            await client.logout()
-            await sys.exit()
+            await client.logout()    # ログアウト
+            await sys.exit()    # シャットダウン
         
         
         elif message.content.startswith('生きてる'):
