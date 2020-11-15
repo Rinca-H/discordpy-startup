@@ -20,9 +20,5 @@ async def ping(ctx):
 async def hello(ctx):
     await ctx.send('hello!')
 
-@bot.event
-async def on_message(message):
-    if message.content.startswith('test'):
-        await ctx.send('test')
 
 bot.run(token)
