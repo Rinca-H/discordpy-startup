@@ -3,18 +3,46 @@ import asyncio
 import random
 import sys
 import os
+import botFunction.functions as f
 
 client = discord.Client()
-token = os.environ['DISCORD_BOT_TOKEN']
-channel_id = 659621491775635507
-channel = client.get_channel(channel_id)
+
+func_list = {
+    '名言': f.random_meigen,
+    '迷言': f.random_meigen,
+    '武器': f.random_splat_buki,
+    'ブキ': f.random_splat_buki,
+    'help': f.help,
+    'ヘルプ': f.help
+}
+
+
+@client.event
+async def on_ready():
+    '''
+    起動時に呼ばれるメソッド
+    '''
+    print('-----Logged in info-----')
+    print(client.user.name)
+    print(client.user.id)
+    print('------------------------')
 
 
 @client.event
 async def on_message(message):
-    if client.user != message.author:   # 送り主がBotだった場合反応したくないから
-        if message.content.startswith('おはよう'):   # どんな言葉で始まるか調べる
-            m = 'おはよう！' + message.author.name + 'さん！'   # メッセージを変数に詰め込む
-            await message.channel.send(m)   # メッセージが送られてきたチャンネルへメッセージを送る
-
+    '''
+    特定のメッセージを受け取って処理する\n
+    今はメンションを送るとランダムに名言を返す
+    '''
+    try:
+        if client.user.id in message.content:
+            for k in func_list:
+                if k in str(message.content):
+                    await func_list[k](client, message)
+                    break
+            else:
+                await f.random_reply(client, message)
+    except:
+        print(sys.exc_info())
+        
 bot.run(token)
